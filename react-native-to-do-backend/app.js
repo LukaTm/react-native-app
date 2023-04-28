@@ -9,7 +9,6 @@ const app = express();
 require("dotenv").config();
 
 const authRoutes = require("./routes/login");
-const isAuth = require("./middleware/is-auth");
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -49,7 +48,7 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use(cors());
 
-app.use("/api", limiter, isAuth, authRoutes);
+app.use("/api", limiter, authRoutes);
 
 // HANDLE incoming errors from routes
 app.use((err, req, res, next) => {

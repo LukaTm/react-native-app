@@ -1,9 +1,8 @@
-import React, { useState } from "react";
 import axios from "axios";
-import { View, TextInput, Button, TouchableOpacity, Text } from "react-native";
-import { useNavigation } from "react-navigation-hooks";
+import React, { useState } from "react";
+import { View, TextInput, Button, Text } from "react-native";
 
-const SignupScreen = () => {
+const SignupScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
@@ -19,7 +18,6 @@ const SignupScreen = () => {
                 }
             );
             // NAVIGATE TO LOGIN
-            const navigation = useNavigation();
             navigation.navigate("Login");
         } catch (error) {
             console.log(error.response.data);

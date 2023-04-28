@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import {
-    StyleSheet,
     View,
     Text,
     TextInput,
+    Button,
+    StyleSheet,
     TouchableOpacity,
 } from "react-native";
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -26,6 +27,9 @@ export default function LoginScreen() {
             .then((data) => {
                 console.log(data);
                 // do something with the response data
+                // MAKE A CHECK
+                // NAVIGATE to Main App screen
+                navigation.navigate("Main App");
             })
             .catch((error) => {
                 console.error(error);
