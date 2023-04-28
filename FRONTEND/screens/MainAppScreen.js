@@ -1,44 +1,38 @@
+import "react-native-gesture-handler";
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { View, Text, StyleSheet, Pressable, Button } from "react-native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import TodoModal from "../modals/TodoModal";
+import HomeScreen from "./HomeScreen";
+import { DrawerContentScrollView } from "@react-navigation/drawer";
+import { DrawerItemList } from "@react-navigation/drawer";
 
-function MainAppScreen() {
-    const [modalVisible, setModalVisible] = useState(false);
+const Drawer = createDrawerNavigator();
 
-    const toggleModal = () => {
-        setModalVisible(!modalVisible);
-    };
+function MainAppScreen({ onLogout }) {
+    function CustomDrawerContent(props) {
+        return (
+            <View style={{ flex: 1 }}>
+                {/* Scrollable area  */}
+                <DrawerContentScrollView {...props}>
+                    {/* used to render the list of navigation items in the drawer */}
+                    <DrawerItemList {...props} />
+                </DrawerContentScrollView>
+                <View style={{ margin: 16 }}>
+                    <Button title="Log out" onPress={onLogout} />
+                </View>
+            </View>
+        );
+    }
 
     return (
-        <>
-            <TodoModal
-                modalVisible={modalVisible}
-                toggleModal={toggleModal}
-            ></TodoModal>
-            <View
-                style={{
-                    flex: 9,
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-            >
-                <Text>Main App Screen</Text>
-            </View>
-            <View style={{ alignSelf: "flex-end", flex: 1 }}>
-                <Pressable
-                    style={({ pressed }) =>
-                        pressed
-                            ? [styles.pressed, styles.pressable]
-                            : styles.pressed
-                    }
-                    onPress={toggleModal}
-                >
-                    <Ionicons name="add-circle" size={64} color="black" />
-                </Pressable>
-            </View>
-        </>
+        <Drawer.Navigator
+            drawerContent={(props) => <CustomDrawerContent {...props} />}
+        >
+            {/* <Drawer.Screen name="Log Out" component={DrawerContent} /> */}
+            <Drawer.Screen name="Home" component={HomeScreen} />
+        </Drawer.Navigator>
     );
 }
 

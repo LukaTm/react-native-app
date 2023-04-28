@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import {
     View,
@@ -11,30 +12,40 @@ import {
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleLogin = () => {
-        fetch("http://192.168.0.67:8080/api/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email,
-                password,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                // do something with the response data
-                // MAKE A CHECK
-                // NAVIGATE to Main App screen
-                navigation.navigate("Main App");
-            })
-            .catch((error) => {
-                console.error(error);
-                // handle the error
+    const handleLogin = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetch("http://192.168.0.67:8080/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
             });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
+            }
+
+            const responseData = await response.json();
+
+            // Store the user's authentication status
+            await AsyncStorage.setItem("isLoggedIn", "true");
+
+            // REPLACE | USER can't navigate back
+            navigation.replace("Main App");
+        } catch (error) {
+            console.error(error);
+            // handle the error
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -53,12 +64,17 @@ export default function LoginScreen({ navigation }) {
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={handleLogin}
+                disabled={isLoading}
+            >
                 <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-                <Text>Don't have an account? Sign up</Text>
-            </TouchableOpacity>
+            <Button
+                title="Create Account"
+                onPress={() => navigation.navigate("Register")}
+            />
         </View>
     );
 }
@@ -68,29 +84,33 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#fff",
+        paddingHorizontal: 20,
     },
     heading: {
         fontSize: 24,
-        marginBottom: 24,
+        fontWeight: "bold",
+        marginBottom: 20,
     },
     input: {
-        width: "80%",
-        height: 40,
         borderWidth: 1,
         borderColor: "#ccc",
+        padding: 10,
+        marginBottom: 20,
         borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 16,
+        width: "100%",
     },
     button: {
         backgroundColor: "#007bff",
-        paddingHorizontal: 16,
         paddingVertical: 10,
+        paddingHorizontal: 20,
         borderRadius: 5,
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
     },
     buttonText: {
         color: "#fff",
-        fontSize: 16,
+        fontSize: 18,
+        fontWeight: "bold",
     },
 });

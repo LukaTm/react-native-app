@@ -1,6 +1,17 @@
-import { Modal, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useState } from "react";
+import {
+    Modal,
+    View,
+    Text,
+    StyleSheet,
+    Pressable,
+    TextInput,
+    Button,
+} from "react-native";
 
 function TodoModal({ modalVisible, toggleModal }) {
+    const [enteredName, setEnteredName] = useState("");
+
     return (
         <>
             <Modal
@@ -16,7 +27,32 @@ function TodoModal({ modalVisible, toggleModal }) {
                                 This is the modal content!
                             </Text>
                         </View>
-                        <TouchableOpacity onPress={toggleModal}>
+                        <View style={{ alignItems: "center" }}>
+                            <View>
+                                <TextInput
+                                    placeholder="Name"
+                                    style={[
+                                        styles.numberInput,
+                                        { paddingTop: 15 },
+                                    ]}
+                                    onChangeText={setEnteredName}
+                                    value={enteredName}
+                                />
+                            </View>
+                            <Pressable>
+                                <View
+                                    style={{
+                                        backgroundColor: "#c7c39f",
+                                        paddingHorizontal: 8,
+                                        paddingVertical: 5,
+                                        borderRadius: 5,
+                                    }}
+                                >
+                                    <Text>Confirm</Text>
+                                </View>
+                            </Pressable>
+                        </View>
+                        <Pressable onPress={toggleModal}>
                             <View
                                 style={{
                                     backgroundColor: "#3f3636",
@@ -29,7 +65,7 @@ function TodoModal({ modalVisible, toggleModal }) {
                                     Close Modal
                                 </Text>
                             </View>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                 </View>
             </Modal>
@@ -66,6 +102,16 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: "center",
         marginBottom: 20,
+    },
+    numberInput: {
+        height: 50,
+        width: 50,
+        fontSize: 18,
+        borderBottomWidth: 2,
+        color: "red",
+        marginVertical: 8,
+        fontWeight: "bold",
+        textAlign: "center",
     },
 });
 
