@@ -73,7 +73,7 @@ export default function LoginScreen({ navigation }) {
             </TouchableOpacity>
             <Button
                 title="Create Account"
-                onPress={() => navigation.navigate("Register")}
+                onPress={() => navigation.navigate("Signup")}
             />
         </View>
     );
