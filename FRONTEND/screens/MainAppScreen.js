@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import {
-    Modal,
-    View,
-    Text,
-    StyleSheet,
-    Pressable,
-    TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+
+import TodoModal from "../modals/TodoModal";
 
 function MainAppScreen() {
     const [modalVisible, setModalVisible] = useState(false);
@@ -18,37 +13,10 @@ function MainAppScreen() {
 
     return (
         <>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={toggleModal}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalText}>
-                                This is the modal content!
-                            </Text>
-                        </View>
-                        <TouchableOpacity onPress={toggleModal}>
-                            <View
-                                style={{
-                                    backgroundColor: "#3f3636",
-                                    padding: 5,
-                                    borderRadius: 5,
-                                    marginBottom: 10,
-                                }}
-                            >
-                                <Text style={{ color: "white" }}>
-                                    Close Modal
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
-
+            <TodoModal
+                modalVisible={modalVisible}
+                toggleModal={toggleModal}
+            ></TodoModal>
             <View
                 style={{
                     flex: 9,
@@ -75,35 +43,6 @@ function MainAppScreen() {
 }
 
 const styles = StyleSheet.create({
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalView: {
-        backgroundColor: "#dad5d5",
-        borderRadius: 10,
-        height: 200,
-        width: 200,
-        alignItems: "center",
-        justifyContent: "center",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-    },
-    modalContent: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    modalText: {
-        textAlign: "center",
-        marginBottom: 20,
-    },
     pressed: {
         color: "#ff0000",
     },
