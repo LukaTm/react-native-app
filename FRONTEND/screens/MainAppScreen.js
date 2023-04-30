@@ -30,7 +30,6 @@ function MainAppScreen({ onLogout }) {
         <Drawer.Navigator
             drawerContent={(props) => <CustomDrawerContent {...props} />}
         >
-            {/* <Drawer.Screen name="Log Out" component={DrawerContent} /> */}
             <Drawer.Screen name="Home" component={HomeScreen} />
         </Drawer.Navigator>
     );

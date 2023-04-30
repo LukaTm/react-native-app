@@ -6,8 +6,12 @@ import React, { useEffect, useState } from "react";
 import LoginScreen from "./screens/LoginScreen";
 import MainAppScreen from "./screens/MainAppScreen";
 import SignupScreen from "./screens/SignupScreen";
+import HomeScreen from "./screens/HomeScreen";
+
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 function App() {
     const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +50,7 @@ function App() {
     return (
         <NavigationContainer>
             {isLoggedIn ? (
-                <MainAppScreen onLogout={handleLogout} />
+                <MainAppScreen onLogout={handleLogout}></MainAppScreen>
             ) : (
                 <Stack.Navigator>
                     <Stack.Screen name="Login" component={LoginScreen} />
