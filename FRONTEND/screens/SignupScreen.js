@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { View, TextInput, Button, Text } from "react-native";
 
+//  automatically passed to the child components of the navigator
 const SignupScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

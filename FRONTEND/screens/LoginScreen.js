@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -9,10 +9,13 @@ import {
     TouchableOpacity,
 } from "react-native";
 
-export default function LoginScreen({ navigation }) {
+import { useRoute } from "@react-navigation/native";
+
+export default function LoginScreen(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const route = useRoute(); // Add this line
 
     const handleLogin = async () => {
         setIsLoading(true);
@@ -32,14 +35,10 @@ export default function LoginScreen({ navigation }) {
                 const errorData = await response.json();
                 throw new Error(errorData.message);
             }
-
             const responseData = await response.json();
 
-            // Store the user's authentication status
-            await AsyncStorage.setItem("isLoggedIn", "true");
-
-            // REPLACE | USER can't navigate back
-            navigation.replace("Main App");
+            // Call handleLoginSuccess to update the authentication status in App.js
+            props.handleLoginSuccess();
         } catch (error) {
             console.error(error);
             // handle the error
@@ -73,7 +72,7 @@ export default function LoginScreen({ navigation }) {
             </TouchableOpacity>
             <Button
                 title="Create Account"
-                onPress={() => navigation.navigate("Signup")}
+                onPress={() => props.navigation.navigate("Signup")}
             />
         </View>
     );

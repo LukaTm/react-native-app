@@ -4,11 +4,15 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import LoginScreen from "./screens/LoginScreen";
-import MainAppScreen from "./screens/MainAppScreen";
 import SignupScreen from "./screens/SignupScreen";
 import HomeScreen from "./screens/HomeScreen";
 
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+    createDrawerNavigator,
+    DrawerContentScrollView,
+    DrawerItemList,
+} from "@react-navigation/drawer";
+import { Button, View } from "react-native";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -43,6 +47,30 @@ function App() {
         setIsLoggedIn(false);
     };
 
+    function CustomDrawerContent(props) {
+        return (
+            <View style={{ flex: 1 }}>
+                {/* Scrollable area  */}
+                <DrawerContentScrollView {...props}>
+                    {/* used to render the list of navigation items in the drawer */}
+                    <DrawerItemList {...props} />
+                </DrawerContentScrollView>
+                <View style={{ margin: 16 }}>
+                    <Button title="Log out" onPress={handleLogout} />
+                </View>
+            </View>
+        );
+    }
+
+    const handleLoginSuccess = async () => {
+        setIsLoggedIn(true);
+        try {
+            await AsyncStorage.setItem("isLoggedIn", "true");
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     if (isLoading) {
         return null;
     }
@@ -50,10 +78,25 @@ function App() {
     return (
         <NavigationContainer>
             {isLoggedIn ? (
-                <MainAppScreen onLogout={handleLogout}></MainAppScreen>
+                <Drawer.Navigator
+                    drawerContent={(props) => (
+                        <CustomDrawerContent {...props} />
+                    )}
+                >
+                    <Drawer.Screen name="haah" component={HomeScreen} />
+                </Drawer.Navigator>
             ) : (
                 <Stack.Navigator>
-                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen name="Login">
+                        {/*  */}
+                        {(props) => (
+                            <LoginScreen
+                                // All props like - navigation
+                                {...props}
+                                handleLoginSuccess={handleLoginSuccess}
+                            />
+                        )}
+                    </Stack.Screen>
                     <Stack.Screen name="Signup" component={SignupScreen} />
                 </Stack.Navigator>
             )}

@@ -27,9 +27,6 @@ export default function HomeScreen() {
                     <Ionicons name="add-circle" size={64} color="black" />
                 </Pressable>
             </View>
-            {/* <Pressable style={styles.logoutButton} onPress={handleLogout}>
-                <Text style={styles.logoutButtonText}>Logout</Text>
-            </Pressable> */}
         </View>
     );
 }
