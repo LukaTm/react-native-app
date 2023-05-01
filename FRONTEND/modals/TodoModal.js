@@ -9,8 +9,14 @@ import {
     Button,
 } from "react-native";
 
-function TodoModal({ modalVisible, toggleModal }) {
+function TodoModal({ modalVisible, toggleModal, setData }) {
     const [enteredName, setEnteredName] = useState("");
+
+    function modalConfirm() {
+        toggleModal();
+        setData(enteredName);
+        setEnteredName("");
+    }
 
     return (
         <>
@@ -39,7 +45,7 @@ function TodoModal({ modalVisible, toggleModal }) {
                                     value={enteredName}
                                 />
                             </View>
-                            <Pressable>
+                            <Pressable onPress={modalConfirm}>
                                 <View
                                     style={{
                                         backgroundColor: "#c7c39f",

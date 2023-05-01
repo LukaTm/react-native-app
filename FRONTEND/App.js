@@ -63,9 +63,9 @@ function App() {
     }
 
     const handleLoginSuccess = async () => {
-        setIsLoggedIn(true);
         try {
             await AsyncStorage.setItem("isLoggedIn", "true");
+            setIsLoggedIn(true);
         } catch (error) {
             console.error(error);
         }
