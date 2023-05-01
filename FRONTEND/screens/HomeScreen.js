@@ -9,17 +9,17 @@ import axios from "axios";
 export default function HomeScreen() {
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [fakeData, setFakeData] = useState(["maluka", "kapuka", "1", "haha"]);
-
-    const setData = (newData) => {
-        setFakeData((prevData) => [...prevData, newData]);
-    };
-
     const toggleModal = () => {
         setModalVisible(!modalVisible);
     };
 
     const [posts, setPosts] = useState([]);
+
+    const [refreshData, setRefreshData] = useState(false);
+
+    const refreshNewData = () => {
+        setRefreshData(!refreshData);
+    };
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -42,26 +42,18 @@ export default function HomeScreen() {
             }
         };
         fetchPosts();
-    }, []);
+    }, [refreshData]);
 
     const renderItems = ({ item }) => {
         return <Text>{item}</Text>;
     };
-
-    // return (
-    //     <View>
-    //         {posts.map((post) => (
-    //             <Text key={post._id}>{post.content}</Text>
-    //         ))}
-    //     </View>
-    // );
 
     return (
         <View style={{ flex: 1 }}>
             <TodoModal
                 modalVisible={modalVisible}
                 toggleModal={toggleModal}
-                setData={setData}
+                refreshNewData={refreshNewData}
             />
             <View
                 style={{

@@ -12,7 +12,7 @@ import axios from "axios";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function TodoModal({ modalVisible, toggleModal, setData }) {
+function TodoModal({ modalVisible, toggleModal, refreshNewData }) {
     const [enteredName, setEnteredName] = useState("");
 
     async function modalConfirm() {
@@ -34,8 +34,8 @@ function TodoModal({ modalVisible, toggleModal, setData }) {
             console.error(err);
             throw err;
         } finally {
+            await refreshNewData();
             toggleModal();
-            setData(enteredName);
             setEnteredName("");
         }
     }
