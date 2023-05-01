@@ -33,10 +33,9 @@ export default function HomeScreen() {
                     "http://192.168.0.67:8080/api/post/gettododata",
                     { headers }
                 );
-                setPosts([]);
-                const posts = response.data.posts.map((post) =>
-                    setPosts((prevData) => [...prevData, post.content])
-                );
+
+                const posts = response.data.posts.map((post) => post.content);
+                setPosts(posts);
             } catch (error) {
                 console.log(error);
             }
