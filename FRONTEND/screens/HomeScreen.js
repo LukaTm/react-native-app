@@ -30,8 +30,7 @@ export default function HomeScreen() {
             <View
                 style={{
                     flex: 9,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    margin: 10,
                 }}
             >
                 <View>

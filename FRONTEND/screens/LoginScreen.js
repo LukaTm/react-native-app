@@ -1,5 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     View,
     Text,
@@ -8,14 +7,12 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from "react-native";
-
-import { useRoute } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const route = useRoute(); // Add this line
 
     const handleLogin = async () => {
         setIsLoading(true);
@@ -36,6 +33,9 @@ export default function LoginScreen(props) {
                 throw new Error(errorData.message);
             }
             const responseData = await response.json();
+
+            // Store the token in AsyncStorage
+            await AsyncStorage.setItem("token", responseData.token);
 
             // Call handleLoginSuccess to update the authentication status in App.js
             props.handleLoginSuccess();

@@ -8,14 +8,36 @@ import {
     TextInput,
     Button,
 } from "react-native";
+import axios from "axios";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function TodoModal({ modalVisible, toggleModal, setData }) {
     const [enteredName, setEnteredName] = useState("");
 
-    function modalConfirm() {
-        toggleModal();
-        setData(enteredName);
-        setEnteredName("");
+    async function modalConfirm() {
+        // CREATE A POST REQUEST AND PASS SOME DATA
+        // Get token from AsyncStorage
+        const token = await AsyncStorage.getItem("token");
+
+        const headers = {
+            Authorization: `Bearer ${token}`,
+        };
+
+        try {
+            const response = await axios.post(
+                "http://192.168.0.67:8080/api/post/todo",
+                { enteredName: enteredName },
+                { headers }
+            );
+        } catch (err) {
+            console.error(err);
+            throw err;
+        } finally {
+            toggleModal();
+            setData(enteredName);
+            setEnteredName("");
+        }
     }
 
     return (

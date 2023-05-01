@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
+// generate unique value
+const { v4: uuidv4 } = require("uuid");
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema(
     {
-        title: {
-            type: String,
-            required: true,
-        },
         content: {
             type: String,
             required: true,

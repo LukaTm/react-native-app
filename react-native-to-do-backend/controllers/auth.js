@@ -1,8 +1,10 @@
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const User = require("../models/User");
 require("dotenv").config();
+
+const Post = require("../models/Todo");
 
 exports.postLogin = async (req, res) => {
     const { email, password } = req.body;
@@ -82,5 +84,24 @@ exports.postSignup = async (req, res) => {
         res.status(500).json({
             message: "Server Error",
         });
+    }
+};
+
+exports.postTodo = async (req, res) => {
+    const { enteredName } = req.body;
+
+    try {
+        const post = new Post({
+            content: enteredName,
+            creator: req.userId,
+        });
+
+        const savedPost = await post.save();
+        res.status(201).json({ message: "Post created", post: savedPost });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Failed to create post" });
+    } finally {
+        console.log("Request completed");
     }
 };
