@@ -1,7 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, Pressable, FlatList } from "react-native";
 import TodoModal from "../modals/TodoModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import axios from "axios";
 
 export default function HomeScreen() {
     const [modalVisible, setModalVisible] = useState(false);
@@ -16,9 +19,42 @@ export default function HomeScreen() {
         setModalVisible(!modalVisible);
     };
 
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            const token = await AsyncStorage.getItem("token");
+
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
+            try {
+                const response = await axios.get(
+                    "http://192.168.0.67:8080/api/post/gettododata",
+                    { headers }
+                );
+                setPosts([]);
+                const posts = response.data.posts.map((post) =>
+                    setPosts((prevData) => [...prevData, post.content])
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchPosts();
+    }, []);
+
     const renderItems = ({ item }) => {
         return <Text>{item}</Text>;
     };
+
+    // return (
+    //     <View>
+    //         {posts.map((post) => (
+    //             <Text key={post._id}>{post.content}</Text>
+    //         ))}
+    //     </View>
+    // );
 
     return (
         <View style={{ flex: 1 }}>
@@ -34,10 +70,7 @@ export default function HomeScreen() {
                 }}
             >
                 <View>
-                    <FlatList
-                        data={fakeData}
-                        renderItem={renderItems}
-                    ></FlatList>
+                    <FlatList data={posts} renderItem={renderItems}></FlatList>
                 </View>
             </View>
             <View style={{ alignSelf: "flex-end", flex: 1 }}>

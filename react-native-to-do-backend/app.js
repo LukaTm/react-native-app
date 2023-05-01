@@ -32,10 +32,11 @@ const fileFilter = (req, file, cb) => {
 };
 
 // LIMIT REQUESTS 15 MIN | MAX - 100
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-});
+
+// const limiter = rateLimit({
+//     windowMs: 15 * 60 * 1000,
+//     max: 100,
+// });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -48,7 +49,8 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use(cors());
 
-app.use("/api", limiter, authRoutes);
+// app.use("/api", limiter, authRoutes);
+app.use("/api", authRoutes);
 
 // HANDLE incoming errors from routes
 app.use((err, req, res, next) => {

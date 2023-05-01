@@ -89,17 +89,18 @@ exports.postSignup = async (req, res) => {
 
 exports.postTodo = async (req, res) => {
     const { enteredName } = req.body;
-    let creator;
+    const userId = req.userId;
 
     try {
         const post = new Post({
             content: enteredName,
-            creator: req.userId,
+            creator: userId,
+            viewers: userId,
         });
 
         await post.save();
 
-        const findUser = await User.findById(req.userId);
+        const findUser = await User.findById(userId);
         findUser.posts.push(post);
         const savePushedPost = await findUser.save();
 
@@ -107,5 +108,18 @@ exports.postTodo = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Failed to create post" });
+    }
+};
+
+exports.getTodoData = async (req, res) => {
+    const userId = req.userId;
+
+    try {
+        const posts = await Post.find({ viewers: userId })
+            .populate("creator")
+            .select("content");
+        res.json({ posts });
+    } catch (error) {
+        throw new Error(error);
     }
 };

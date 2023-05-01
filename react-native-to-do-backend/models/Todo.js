@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 // generate unique value
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema(
@@ -15,6 +15,12 @@ const postSchema = new Schema(
             ref: "User",
             required: true,
         },
+        viewers: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
     },
     { timestamps: true }
 );
