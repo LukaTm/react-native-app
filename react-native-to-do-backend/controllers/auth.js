@@ -38,8 +38,8 @@ exports.postLogin = async (req, res) => {
                 userId: user._id.toString(),
             },
             // user to verify and ONLY server knows it
-            process.env.JWT_SECRET,
-            { expiresIn: "1h" }
+            process.env.JWT_SECRET
+            // { expiresIn: "1h" }
         );
 
         res.status(200).json({
@@ -89,6 +89,7 @@ exports.postSignup = async (req, res) => {
 
 exports.postTodo = async (req, res) => {
     const { enteredName } = req.body;
+    let creator;
 
     try {
         const post = new Post({
@@ -96,12 +97,15 @@ exports.postTodo = async (req, res) => {
             creator: req.userId,
         });
 
-        const savedPost = await post.save();
-        res.status(201).json({ message: "Post created", post: savedPost });
+        await post.save();
+
+        const findUser = await User.findById(req.userId);
+        findUser.posts.push(post);
+        const savePushedPost = await findUser.save();
+
+        res.status(201).json({ message: "Post created" });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Failed to create post" });
-    } finally {
-        console.log("Request completed");
     }
 };
