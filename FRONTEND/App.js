@@ -13,6 +13,7 @@ import {
     DrawerItemList,
 } from "@react-navigation/drawer";
 import { Button, View } from "react-native";
+import AddUser from "./screens/AddUser";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -84,11 +85,11 @@ function App() {
                     )}
                 >
                     <Drawer.Screen name="haah" component={HomeScreen} />
+                    <Drawer.Screen name="Add user" component={AddUser} />
                 </Drawer.Navigator>
             ) : (
                 <Stack.Navigator>
                     <Stack.Screen name="Login">
-                        {/*  */}
                         {(props) => (
                             <LoginScreen
                                 // All props like - navigation

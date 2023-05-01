@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, FlatList } from "react-native";
 import TodoModal from "../modals/TodoModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { useFocusEffect } from "@react-navigation/native";
 
 import axios from "axios";
 
@@ -21,27 +23,31 @@ export default function HomeScreen() {
         setRefreshData(!refreshData);
     };
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            const token = await AsyncStorage.getItem("token");
+    useFocusEffect(
+        React.useCallback(() => {
+            const fetchPosts = async () => {
+                const token = await AsyncStorage.getItem("token");
 
-            const headers = {
-                Authorization: `Bearer ${token}`,
+                const headers = {
+                    Authorization: `Bearer ${token}`,
+                };
+                try {
+                    const response = await axios.get(
+                        "http://192.168.0.67:8080/api/post/gettododata",
+                        { headers }
+                    );
+
+                    const posts = response.data.posts.map(
+                        (post) => post.content
+                    );
+                    setPosts(posts);
+                } catch (error) {
+                    console.log(error);
+                }
             };
-            try {
-                const response = await axios.get(
-                    "http://192.168.0.67:8080/api/post/gettododata",
-                    { headers }
-                );
-
-                const posts = response.data.posts.map((post) => post.content);
-                setPosts(posts);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchPosts();
-    }, [refreshData]);
+            fetchPosts();
+        }, [refreshData])
+    );
 
     const renderItems = ({ item }) => {
         return <Text>{item}</Text>;

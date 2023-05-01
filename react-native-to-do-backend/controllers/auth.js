@@ -1,10 +1,10 @@
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
 require("dotenv").config();
 
 const Post = require("../models/Todo");
+const User = require("../models/User");
 
 exports.postLogin = async (req, res) => {
     const { email, password } = req.body;
@@ -121,5 +121,19 @@ exports.getTodoData = async (req, res) => {
         res.json({ posts });
     } catch (error) {
         throw new Error(error);
+    }
+};
+
+exports.addUserToViewers = async (req, res) => {
+    const userId = req.userId;
+
+    try {
+        // add new user to viewers for all found posts
+        await Post.updateMany(
+            { creator: "644ffb097d1659516290b185" },
+            { $addToSet: { viewers: userId } }
+        );
+    } catch (error) {
+        console.log(error);
     }
 };
