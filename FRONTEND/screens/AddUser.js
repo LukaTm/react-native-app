@@ -17,8 +17,9 @@ function AddUser() {
         };
 
         try {
-            const response = await axios.get(
+            const response = await axios.post(
                 "http://192.168.0.67:8080/api/post/addUserToViewer",
+                { input: input },
                 { headers }
             );
         } catch (error) {

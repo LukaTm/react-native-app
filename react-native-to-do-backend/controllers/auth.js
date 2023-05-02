@@ -126,11 +126,12 @@ exports.getTodoData = async (req, res) => {
 
 exports.addUserToViewers = async (req, res) => {
     const userId = req.userId;
+    const getNewPostsUserId = req.body.input;
 
     try {
         // add new user to viewers for all found posts
         await Post.updateMany(
-            { creator: "644ffb097d1659516290b185" },
+            { creator: getNewPostsUserId },
             { $addToSet: { viewers: userId } }
         );
     } catch (error) {

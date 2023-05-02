@@ -26,8 +26,8 @@ router.post("/login", authController.postLogin);
 
 router.post("/post/todo", isAuth, authController.postTodo);
 
-router.get("/post/gettododata", isAuth, authController.getTodoData);
+router.post("/post/addUserToViewer", isAuth, authController.addUserToViewers);
 
-router.get("/post/addUserToViewer", isAuth, authController.addUserToViewers);
+router.get("/post/gettododata", isAuth, authController.getTodoData);
 
 module.exports = router;
